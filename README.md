@@ -65,21 +65,13 @@ An AI-powered web application that analyzes, scores, and enhances resumes for op
 ├── index.html           # Professional web interface
 ├── requirements.txt     # Python dependencies
 ├── .env                # Environment variables
-├── test_api.py         # API testing script
 └── README.md           # Project documentation
 ```
 
 ## 🌐 Deployment Options
 
-**Vercel** (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
-
-**Other Platforms**: Render, Railway, Heroku
-- Set start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Add environment variable: `GOOGLE_API_KEY`
+**Hugging Face Spaces**
+Live Link: https://yashpinjarkar10-resume-enhancement-system.hf.space
 
 ## 🧪 Testing
 
@@ -106,5 +98,6 @@ http://localhost:8000/docs
 MIT License - Open source and free to use
 
 ---
+
 
 **✨ Boost your career with AI-enhanced resumes!**
