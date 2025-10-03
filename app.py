@@ -6,12 +6,16 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import PyPDF2
-from langchain_community.document_loaders.image import UnstructuredImageLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
 from dotenv import load_dotenv
 import re
 from PIL import Image
+import easyocr
+from PIL import Image
+import io
+import numpy as np
+import base64
 import json
 from jinja2 import Template
 from reportlab.lib.pagesizes import letter, A4
@@ -58,24 +62,44 @@ def extract_text_from_pdf(pdf_file: bytes) -> str:
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error extracting text from PDF: {str(e)}")
 
+
 def extract_text_from_image(image_file: bytes) -> str:
-    """Extract text from image file using UnstructuredImageLoader"""
+    """Extract text from image file using Google Gemini Vision"""
     try:
-        # Save image to temporary file
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
-            temp_file.write(image_file)
-            temp_file_path = temp_file.name
+         
+        # Convert bytes to PIL Image
+        image = Image.open(io.BytesIO(image_file))
         
-        # Load and extract text
-        loader = UnstructuredImageLoader(temp_file_path)
-        data = loader.load()
+        # Convert to numpy array (EasyOCR expects this format)
+        image_array = np.array(image)
         
-        # Clean up temporary file
-        os.unlink(temp_file_path)
+        # Initialize EasyOCR reader (downloads model if needed)
+        reader = easyocr.Reader(['en'])  # Add other languages as needed, e.g., ['en', 'fr']
         
-        return data[0].page_content if data else ""
+        # Extract text
+        results = reader.readtext(image_array)
+        
+        # Join extracted texts
+        extracted_text = ' '.join([result[1] for result in results])
+        
+        return extracted_text.strip()
+
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error extracting text from image: {str(e)}")
+        return f"""
+        IMAGE PROCESSING NOTE: Unable to extract text from image automatically.
+        
+        To analyze your resume from an image, please:
+        1. Convert the image to a PDF file, or
+        2. Type/copy the resume content manually
+        
+        Error details: {str(e)}
+        
+        Alternatively, you can still proceed with a basic analysis by providing key information:
+        - Name and contact information
+        - Work experience with dates and achievements
+        - Education background
+        - Skills and certifications
+        """
 
 def get_ats_score(resume_text: str) -> dict:
     """Calculate ATS score based on various parameters"""
