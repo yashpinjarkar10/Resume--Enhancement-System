@@ -261,10 +261,8 @@ def enhance_resume_with_ai(resume_text: str, ats_analysis: dict) -> str:
     
     enhancement_prompt = f"""
     You are an expert resume writer and ATS optimization specialist. Please enhance the following resume based on the ATS analysis provided.
-
     Current Resume:
     {resume_text}
-
     ATS Analysis Results:
     - Total ATS Score: {ats_analysis['total_score']}/100
     - Quantified Impact Items Found: {feedback['quantified_impact']}
@@ -275,7 +273,6 @@ def enhance_resume_with_ai(resume_text: str, ats_analysis: dict) -> str:
     - Has Email: {feedback['has_email']}
     - Has Phone: {feedback['has_phone']}
     - Has Links: {feedback['has_links']}
-
     Please enhance this resume by:
     1. Adding more quantified achievements with specific numbers, percentages, or dollar amounts
     2. Incorporating stronger action verbs
@@ -285,56 +282,44 @@ def enhance_resume_with_ai(resume_text: str, ats_analysis: dict) -> str:
     6. Improving contact information section if needed
     7. {'Adding professional links (LinkedIn, GitHub, portfolio) if missing' if not feedback['has_links'] else 'Optimizing existing professional links'}
     8. Making the content more compelling and professional
-
     {'IMPORTANT: This resume is missing professional links/URLs. Please add placeholders like "LinkedIn: linkedin.com/in/[your-profile]" or "Portfolio: [your-website.com]" in the contact section.' if not feedback['has_links'] else ''}
-
     Please provide the enhanced resume in the following structured format for optimal PDF template rendering:
-
     [Full Name]
     [Professional Title/Role]
     [Email] | [Phone] | [City, State]
     LinkedIn: [LinkedIn URL]
     GitHub: [GitHub URL]
     Website: [Portfolio URL]
-
     SUMMARY
     [2-3 sentences professional summary highlighting key achievements, skills, and career objectives]
-
     EXPERIENCE
     [Job Title]
     [Company Name] | [Location] | [Start Date - End Date]
     - [Quantified achievement with specific metrics and impact]
     - [Another achievement demonstrating skills and results]
     - [Third achievement showing growth and responsibility]
-
     [Previous Job Title]
     [Previous Company] | [Location] | [Start Date - End Date]
     - [Quantified achievement with numbers/percentages]
     - [Achievement showing technical or leadership skills]
-
     PROJECTS
     [Project Name] [GitHub/Demo Link]
     - [Brief description of project and technologies used]
     - [Quantified impact or key technical achievements]
     - [Notable features or learning outcomes]
-
     EDUCATION
     [Degree Name]
     [University Name] | [Location] | [Graduation Year]
     - [GPA if above 3.5, relevant coursework, honors, or achievements]
-
     SKILLS
     Technical Skills: [List comma-separated technical skills]
     Tools & Technologies: [List frameworks, tools, software]
     Soft Skills: [List relevant soft skills]
-
     ACHIEVEMENTS
     - [Notable achievement with quantified impact]
     - [Certification, award, or recognition]
     - [Competition result or significant accomplishment]
-
     IMPORTANT: Provide ONLY the resume content in the exact format above. Do not include any introductory phrases or explanatory text. Start directly with the candidate's name.
-
     Enhanced Resume:
     """
     
